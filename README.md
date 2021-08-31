@@ -75,5 +75,5 @@ In medical imaging of a brain tumor, our major goal is to extract meaningful and
 <hr>
 
 ### Flow of the Model
-<img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/flow%20of%20project.png" width="500" height="500">
+<img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/flow%20of%20project.png" width="500" height="400" style="margin:50px;">
 <hr>
