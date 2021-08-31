@@ -52,6 +52,9 @@ A deep learning application based on approach for brain tumor MRI segmentation.
       <ul>
         <li><a href="#comparative_analysis">Comparative Analysis</a></li>
       </ul>
+      <ul>
+        <li><a href="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/tree/master/Gif%20Results">More Gif Results</a></li>
+      </ul>
      </li>  
     <li>
       <a href="#How_to_run">How To Run</a>
