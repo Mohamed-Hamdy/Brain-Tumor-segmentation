@@ -59,20 +59,16 @@ A deep learning application based on approach for brain tumor MRI segmentation.
 <!-- General C++ Problems -->
 ## General
 Brain tumor segmentation seeks to separate healthy tissue from tumorous regions such as the advancing tumor, necrotic core and surrounding edema. This is an essential step in diagnosis and treatment planning, both of which need to take place quickly in the case of a malignancy in order to maximize the likelihood of successful treatment. Due to the slow and tedious nature of manual segmentation, there is a high demand for computer algorithms that can do this quickly and accurately.
-<hr>
 
 ### Overview
 Brain tumor is one of the most dangerous types of cancer caused by the 5-year survival rate is only about 36%. Accurate diagnosis of the brain the tumor is critical to treatment planning. A major challenge in brain tumor treatment planning and quantitative evaluation is determination of the tumor extent.Manual segmentation of brain tumor extent from 3D MRI volumes is a very time-consuming task and the performance is highly relied on operator’s experience. In this context, a reliable fully automatic segmentation method for the brain tumor segmentation is necessary for an efficient measurement of the tumor extent. In this study, we propose two a fully automatic method for brain tumor segmentation, which is developed using U-Net based model and convent based model deep convolutional networks. Automatic segmentation of brain tumors from medical images is important for clinical assessment and treatment planning of brain tumors.
-<hr>
 
 ### Problem Definition
 One of the reasons for the rise in death rates in today's society is the development of brain tumors. Any mass caused by aberrant or uncontrolled cell development is referred to as a tumor. A benign or malignant brain tumor can exist. The structure of a benign brain tumor is uniform, and it does not contain active (cancer) cells, whereas the structure of a malignant brain tumor is non-uniform (heterogeneous), and it contains active cells. We must first read an MRI image of the brain before applying image segmentation to detect a brain tumor. We demonstrate an effective strategy for removing noise from MRI images and detecting brain malignancies.
 	In general, the body consists of many types of cells, and each type has its own functions. The most cells in the body grow and divide in a regular manner to produce more cells. When the body needs it to maintain its health and safety of work. And when you lose your cells, its ability to control and discipline the process of its growth, and the rate of its division increases without any irregularity leading to the formation of extra cells of tissue called a tumor that can be benign or malicious.
-<hr>
 
 ### Motivation and Objective
 In medical imaging of a brain tumor, our major goal is to extract meaningful and trustworthy information from these images with the least amount of error feasible, and then to determine the tumor's area in the image. To assist medical personnel in determining the size and severity of the tumor in order to make the best treatment option. The goal of this research is to create an algorithm that uses convolutional neural networks and segmentation techniques to extract a tumor image from an MRI brain image.
-<hr>
 
 ### Flow of the Model
 <img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/flow%20of%20project.png" width="500" height="300" >
@@ -86,11 +82,9 @@ They include co-registered MRI native (T1) and T1-weighted (T1Gd) contrasts as w
 All BraTS'2017 3D-MRI data sets are 240 per 240 per 155.
 They are distributed, co-registered and interpolated to the same anatomical template (1 mm3). 
 All RMI volumes were manually segmented by one to four raters, with expert neuro-radiologists having confirmed their annotations. The edema, necrosis and non-simulating tumors and active/improving tumors each were segmented.
-<hr>
 
 ## Explanation Of The Model
 * Preprocessing Decryption
-<br>
 First, a minimal pre-processing of MRI data is applied. The 1% highest and lowest intensities were removed, then each modality of MR images was normalized by subtracting the mean and dividing by the standard deviation of the intensities within the slice. To address the class imbalance problem in the data, data augmentation technique were employed. This consists in adding new synthetic images by performing operations and transformations on data and the corresponding manual tumors segmentation images obtained by human experts (ground truth data). The transformations comprise rotation, translation, and horizontal ﬂipping and mirroring.
 <br>
 * Training phase
@@ -98,7 +92,7 @@ The CNN used in this study has a similar architecture as that of U-net [1]. Our 
 <h3>Model Architecture</h3>
 <img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/model%20Architecture.png">
 
-* Prediction Phase
+* Prediction Phase <br>
 After network training, prediction may be performed. This step consists to provide the network with the four MRI modalities of an unsegmented volume that it has never processed or encountered before, and it must be able to return a segmented image.
 
 ## Result Analysis
