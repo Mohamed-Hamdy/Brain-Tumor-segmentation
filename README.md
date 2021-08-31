@@ -17,7 +17,7 @@ A deep learning application based on approach for brain tumor MRI segmentation.
         <li><a href="#Motivation and Objective">Motivation and Objective</a></li>
       </ul>
       <ul>
-        <li><a href="#Flow of the Modelivation and Objective</a></li>
+        <li><a href="#Flow of the Modelivation and Objective">Flow of the Modelivation and Objective</a></li>
       </ul>
     </li>
     <li>
