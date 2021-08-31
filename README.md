@@ -75,5 +75,5 @@ In medical imaging of a brain tumor, our major goal is to extract meaningful and
 <hr>
 
 ### Flow of the Model
-In medical imaging of a brain tumor, our major goal is to extract meaningful and trustworthy information from these images with the least amount of error feasible, and then to determine the tumor's area in the image. To assist medical personnel in determining the size and severity of the tumor in order to make the best treatment option. The goal of this research is to create an algorithm that uses convolutional neural networks and segmentation techniques to extract a tumor image from an MRI brain image.
+<img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/flow%20of%20project.png">
 <hr>
