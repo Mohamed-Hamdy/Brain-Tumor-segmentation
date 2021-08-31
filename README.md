@@ -97,7 +97,7 @@ The CNN used in this study has a similar architecture as that of U-net [1]. Our 
 After network training, prediction may be performed. This step consists to provide the network with the four MRI modalities of an unsegmented volume that it has never processed or encountered before, and it must be able to return a segmented image.
 
 ## Result Analysis
-### Segmentation Result
+<h4>Segmentation Result</h4>
 <img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/segmentation%20result.png">
 
 
