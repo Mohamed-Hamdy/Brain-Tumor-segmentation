@@ -157,6 +157,7 @@ In this chapter we will represent the final model accuracy and compare our two m
 * use the files (Two files one for weights of model and another json file)
 * Run the Prediction files to get the Result without background of Brain 
 * Run the Gui file if you want to get full Result like in <a href="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Gui%20Screen.png">this Screenshot</a>
+
 ## Project_Team_Members <br>
 Mohamed Hamdy Mohamed - [@LinkedIn](https://www.linkedin.com/in/mohamed-hamdy-0155b2173/) - LinkedIn<br>
 Mohamed Alaa Kelany - [@LinkedIn](https://www.linkedin.com/in/mohamed-alaa-4368551b2/) - LinkedIn<br>
