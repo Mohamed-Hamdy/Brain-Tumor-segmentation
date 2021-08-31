@@ -2,10 +2,8 @@ import matplotlib
 import random
 from glob import glob
 import os
-import shutil
 import SimpleITK as sitk
 from evaluation_metrics import *
-from model import Unet_model
 from PIL import Image, ImageDraw
 from sklearn.metrics import confusion_matrix
 import json
@@ -19,19 +17,89 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as FunAnimation
 from matplotlib.animation import PillowWriter
 import nibabel as nib
-from colour import Color
-from PIL import Image
+#from colour import Color
+from keras.layers import Dropout,GaussianNoise, Input,Activation
+from numpy import random
+from keras.models import *
+from keras.layers import *
+from keras.optimizers import *
+from keras import backend as K
+from keras.callbacks import ModelCheckpoint
+from keras import initializers
+
 
 class Prediction(object):
 
     def __init__(self, batch_size_test, load_model_path):
 
         self.batch_size_test = batch_size_test
-
         unet = Unet_model(img_shape=(240, 240, 4), load_model_weights=load_model_path)
         self.model = unet.model
         print('U-net CNN compiled!\n')
+        
+        inputs = Input((240,240,4))
+        conv1 = Conv2D(32, (3, 3), activation='relu', padding='same',
+                      kernel_initializer=initializers.random_normal(stddev=0.01))(inputs)            
+        conv1 = Conv2D(32, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(conv1)
+        pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
 
+        conv2 = Conv2D(64, (3, 3), activation='relu', padding='same',
+                      kernel_initializer=initializers.random_normal(stddev=0.01))(pool1)
+        conv2 = Conv2D(64, (3, 3), activation='relu', padding='same',
+                      kernel_initializer=initializers.random_normal(stddev=0.01))(conv2)
+        pool2 = MaxPooling2D(pool_size=(2, 2))(conv2)
+
+        conv3 = Conv2D(128, (3, 3), activation='relu', padding='same',
+                      kernel_initializer=initializers.random_normal(stddev=0.01))(pool2)
+        conv3 = Conv2D(128, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(conv3)
+        pool3 = MaxPooling2D(pool_size=(2, 2))(conv3)
+
+        conv4 = Conv2D(256, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(pool3)
+        conv4 = Conv2D(256, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(conv4)
+        pool4 = MaxPooling2D(pool_size=(2, 2))(conv4)
+
+        conv5 = Conv2D(512, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(pool4)
+        conv5 = Conv2D(512, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(conv5)
+
+        up6 = concatenate([Conv2DTranspose(256, (2, 2), strides=(2, 2), padding='same',
+                        kernel_initializer=initializers.random_normal(stddev=0.01))(conv5),conv4], axis=3)
+        conv6 = Conv2D(256, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(up6)
+        conv6 = Conv2D(256, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(conv6)
+
+        up7 = concatenate([Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same',
+                    kernel_initializer=initializers.random_normal(stddev=0.01))(conv6),conv3], axis=3)
+        conv7 = Conv2D(128, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(up7)
+        conv7 = Conv2D(128, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(conv7)
+
+        up8 = concatenate([Conv2DTranspose(64, (2, 2), strides=(2, 2),padding='same',
+                        kernel_initializer=initializers.random_normal(stddev=0.01))(conv7),conv2], axis=3)
+        conv8 = Conv2D(64, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(up8)
+        conv8 = Conv2D(64, (3, 3), activation='relu', padding='same',)(conv8)
+
+        up9 = concatenate([Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same',
+                        kernel_initializer=initializers.random_normal(stddev=0.01))(conv8),conv1], axis=3)
+        conv9 = Conv2D(32, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(up9)
+        conv9 = Conv2D(32, (3, 3), activation='relu', padding='same',
+                          kernel_initializer=initializers.random_normal(stddev=0.01))(conv9)
+
+        conv10 = Conv2D(4, (1, 1), activation='relu',
+                            kernel_initializer=initializers.random_normal(stddev=0.01))(conv9)
+        conv10 = Activation('softmax')(conv10)
+        self.model = Model(inputs=[inputs], outputs=[conv10])
+        print('U-net CNN compiled!\n')
+        
     def predict_volume(self, filepath_image, show):
 
         '''
@@ -64,70 +132,10 @@ class Prediction(object):
         t2 = np.array(test_im[3])
         Gui_predict_images = np.array(test_im[0])
 
-        if os.path.exists('./Result'):
-            shutil.rmtree('./Result')
-        os.makedirs('./Result')
-
-        if os.path.exists('./Result/flair_axial'):
-            shutil.rmtree('./Result/flair_axial')
-        os.makedirs('./Result/flair_axial')
-
-        if os.path.exists('./Result/final_axial_prediction_result'):
-            shutil.rmtree('./Result/final_axial_prediction_result')
-        os.makedirs('./Result/final_axial_prediction_result')
-
-        if os.path.exists('./Result/final_axial_gt_result'):
-            shutil.rmtree('./Result/final_axial_gt_result')
-        os.makedirs('./Result/final_axial_gt_result')
-
-
-
-        fig = plt.figure(frameon=False)
-        # plot flair_axial
-        for i in range(f.shape[0]):
-            plt.xticks([])
-            plt.yticks([])
-            im = plt.imshow(f[i, :, :], cmap="gray", interpolation='none')
-            plt.axis('off')
-            path = "Result/flair_axial/" + str(i) + ".png"
-            fig.savefig(path, bbox_inches='tight', pad_inches=0.0, dpi=65)
-            # plt.show()
-        print("Done plotting flair_axial")
-
-
-        '''
-        dir = []
-        t1_dir = []
-        t2_dir = []
-        t1c_dir = []
-        for i in range(155):
-            png_dir = 'Result/flair/' + str(i) + '.png'
-            t1_png_dir = './t1/' + str(i) + '.png'
-            t2_png_dir = './t2/' + str(i) + '.png'
-            t1c_png_dir = './t1c/' + str(i) + '.png'
-            dir.append(png_dir)
-            t1_dir.append(t1_png_dir)
-            t2_dir.append(t2_png_dir)
-            t1c_dir.append(t1c_png_dir)
-        images = []
-        t1_images = []
-        t1c_images = []
-        t2_images = []
-
-        for i in range(len(dir)):
-
-            images.append(imageio.imread(dir[i]))
-            t1_images.append(imageio.imread(t1_dir[i]))
-            t1c_images.append(imageio.imread(t1c_dir[i]))
-            t2_images.append(imageio.imread(t2_dir[i]))
-        imageio.mimsave('./Gif/flair.gif', images)
-        imageio.mimsave('./Gif/t1.gif', t1_images)
-        imageio.mimsave('./Gif/t1c.gif', t1c_images)
-        imageio.mimsave('./Gif/t2.gif', t2_images)
-        '''
         test_im = np.array(test_im).astype(np.float32)
         test_image = test_im[0:4]
         flair_img = test_im[0]
+        # print("fff", flair_img.dtype)
         gt = test_im[-1]
         gt[gt == 4] = 3
         flair_img[flair_img == 4] = 3
@@ -139,7 +147,9 @@ class Prediction(object):
         test_image = test_image.swapaxes(0, 1)
         test_image = np.transpose(test_image, (0, 2, 3, 1))
 
+        # print("Test sub ", test_image.shape)
         test_image = test_image[0:155, :, :]  # sub image
+        # print("Test gt ", gt.shape)
         gt = gt[0:155, :, :]
         flair_img = flair_img[0:155, :, :]
         if show:
@@ -157,7 +167,9 @@ class Prediction(object):
         gt[gt == 3] = 4
         flair_img[flair_img == 3] = 4
 
-        return np.array(prediction), np.array(gt), np.array(flair_img), Gui_predict_images
+        # print("fff", flair_img.dtype)
+
+        return np.array(prediction), np.array(gt), np.array(flair_img) , Gui_predict_images
 
     def evaluate_segmented_volume(self, filepath_image, save, show, save_path):
         '''
@@ -168,8 +180,12 @@ class Prediction(object):
         OUTPUT np array of all evaluation metrics
         '''
 
-        predicted_images, gt, flair_images, Gui_predict_images = self.predict_volume(filepath_image, show)
+        predicted_images, gt, flair_images , Gui_predict_images = self.predict_volume(filepath_image, show)
+        # print(predicted_images.dtype)
+        # print("www", flair_images.dtype)
         gt = gt.astype('uint8')
+        #flair_images = flair_images.astype('int16')
+
 
         predicted_images[predicted_images == 1] = 60
         predicted_images[predicted_images == 2] = 180
@@ -178,84 +194,17 @@ class Prediction(object):
         gt[gt == 2] = 180
         gt[gt == 4] = 120
 
-        axial_gt_frames = []
-        axial_predict_frames = []
-
-        axial_prediction_dir = []
-        axial_gt_dir = []
-
-        axial_flair_dir = []
-
-        if os.path.exists('./Result/prediction_axial'):
-            shutil.rmtree('./Result/prediction_axial')
-        os.makedirs('./Result/prediction_axial')
-
-        if os.path.exists('./Result/GT_axial'):
-            shutil.rmtree('./Result/GT_axial')
-        os.makedirs('./Result/GT_axial')
-
-        for i in range(gt.shape[0]):  # range(155):
-            axial_img1 = Image.fromarray(predicted_images[i, :, :], 'L')
-            axial_img2 = Image.fromarray(gt[i, :, :], 'L')
-
-            axial_gt_frames.append(axial_img2)
-            axial_predict_frames.append(axial_img1)
-
-            axial_img1.save("Result/prediction_axial/" + str(i) + ".png")
-            axial_img2.save("Result/GT_axial/" + str(i) + ".png")
-
-            axial_prediction_png_dir = 'Result/prediction_axial/' + str(i) + '.png'
-            axial_gt_png_dir = 'Result/GT_axial/' + str(i) + '.png'
-
-            axial_flair_png_dir = 'Result/flair_axial/' + str(i) + '.png'
-
-            axial_prediction_dir.append(axial_prediction_png_dir)
-            axial_gt_dir.append(axial_gt_png_dir)
-            axial_flair_dir.append(axial_flair_png_dir)
-
-        final_axial_prediction_images_gif = []
-        final_axial_gt_images_gif = []
-        for k in range(len(axial_prediction_dir)):
-            final_prediction_img = cv2.imread(str(axial_prediction_dir[k]), 0)
-            final_flair_img = cv2.imread(str(axial_flair_dir[k]), 0)
-            for i in range(final_prediction_img.shape[0]):
-                for j in range(final_prediction_img.shape[1]):
-                    if final_prediction_img[i][j] == 180:
-                        final_flair_img[i][j] = 180
-                    if final_prediction_img[i][j] == 60:
-                        final_flair_img[i][j] = 60
-                    if final_prediction_img[i][j] == 120:
-                        final_flair_img[i][j] = 120
-            f_dir = 'Result/final_axial_prediction_result/' + str(k) + '.png'
-            cv2.imwrite(f_dir, final_flair_img)
-            final_axial_prediction_images_gif.append(imageio.imread(f_dir))
-            predicted_images[k, :, :] = final_axial_prediction_images_gif[k]
-        #imageio.mimsave('./Gif/final_axial_prediction.gif', final_axial_prediction_images_gif)
-        print("Done axial predict.")
-
-        for k in range(len(axial_gt_dir)):
-            final_gt_img = cv2.imread(str(axial_gt_dir[k]), 0)
-            final_flair_gt_img = cv2.imread(str(axial_flair_dir[k]), 0)
-            for i in range(final_gt_img.shape[0]):
-                for j in range(final_flair_gt_img.shape[1]):
-                    if final_gt_img[i][j] == 180:
-                        final_flair_gt_img[i][j] = 180
-                    if final_gt_img[i][j] == 60:
-                        final_flair_gt_img[i][j] = 60
-                    if final_gt_img[i][j] == 120:
-                        final_flair_gt_img[i][j] = 120
-            f_gt_dir = 'Result/final_axial_gt_result/' + str(k) + '.png'
-            cv2.imwrite(f_gt_dir, final_flair_gt_img)
-            final_axial_gt_images_gif.append(imageio.imread(f_gt_dir))
-        #imageio.mimsave('./Gif/final_axial_gt.gif', final_axial_gt_images_gif)
-
+        
         if save:
             tmp = sitk.GetImageFromArray(predicted_images)
             tmp1 = sitk.GetImageFromArray(gt)
+            #tmp2 = sitk.GetImageFromArray(flair_images)
 
-            sitk.WriteImage(tmp, 'Result/seg.nii.gz'.format(save_path))
-            sitk.WriteImage(tmp, 'Result/{}_p.nii.gz'.format(save_path))
-            sitk.WriteImage(tmp1, 'Result/{}_g.nii.gz'.format(save_path))
+            sitk.WriteImage(tmp, './{}_g.nii.gz'.format(save_path))
+            sitk.WriteImage(tmp1, './{}_g.nii.gz'.format(save_path))
+            print("Finaily Done.")
+            
+            #sitk.WriteImage(tmp2, './{}_flair.nii.gz'.format(save_path))
 
         # compute the evaluation metrics
         Dice_complete = DSC_whole(predicted_images, gt)
@@ -292,7 +241,7 @@ class Prediction(object):
             print("Hausdorff core tumor score (tt sauf vert): {:0.4f}".format(Hausdorff_core))
             print("Hausdorff enhancing tumor score (jaune):{:0.4f} ".format(Hausdorff_en))
             print("***************************************************************\n\n")
-        return np.array(gt), np.array(predicted_images), np.array((Dice_complete, Dice_core, Dice_enhancing,
+        return np.array(gt), np.array(predicted_images), np.array((Dice_complete,Dice_core,Dice_enhancing,
                                                                    Sensitivity_whole,
                                                                    Sensitivity_core,
                                                                    Sensitivity_en,
@@ -305,24 +254,27 @@ class Prediction(object):
 
     def predict_multiple_volumes(self, filepath_volumes, save, show):
 
-        gt_array, prediction_array, results = [], [], []
+        gt_array, prediction_array, results= [], [], []
         counter = 0
 
         for patient in filepath_volumes:
             counter += 1
             tmp1 = patient.split('/')
-            # print(counter)
-            # print(tmp1[-2])
-            # print(tmp1[-1])
+            #print(counter)
+            #print(tmp1[-2])
+            #print(tmp1[-1])
             print("\n\nVolume ID: ", tmp1[-2] + '/' + tmp1[-1])
-            gt, predicted_images, tmp = self.evaluate_segmented_volume(patient, save=save, show=show,
-                                                                       save_path=os.path.basename(patient))
+            gt, predicted_images, tmp = self.evaluate_segmented_volume(patient,save=save,show=show,save_path=os.path.basename(patient))
             # save the results of each volume
             results.append(tmp)
             gt_array.append(gt)
             prediction_array.append(predicted_images)
             # save each ID for later use
 
+        gt_list_arr = np.array(gt_array)
+        prediction_list_arr = np.array(prediction_array)
+
+        
         res = np.array(results)
         print("mean : ", np.mean(res, axis=0))
         print("std : ", np.std(res, axis=0))
@@ -333,7 +285,7 @@ class Prediction(object):
         print("min : ", np.min(res, axis=0))
 
         np.savetxt('./Results.out', res)
-        # np.savetxt('./Volumes_ID.out', Ids, fmt='%s')
+        #np.savetxt('./Volumes_ID.out', Ids, fmt='%s')
 
     def norm_slices(self, slice_not):
         '''
@@ -366,12 +318,12 @@ class Prediction(object):
 
 if __name__ == "__main__":
     # set arguments
-    model_to_load = "./All_dataset_Training_Model.hdf5"
-    print("1")
+    model_to_load = "/content/drive/MyDrive/Project With GUI/All_dataset_Training_Model.hdf5"
+    
+    #model_to_load = "/content/drive/MyDrive/Transfer Based Model/Training_Model.hdf5"
     # paths for the testing data
-    path_HGG = glob('E:/GP/Dataset/BRATS2017/Brats17TrainingData/LGG/Brats17_TCIA_639_1')
+    path_HGG = glob('/content/drive/MyDrive/Project/BRATS2017/Brats17TrainingData/HGG/Brats17_TCIA_201_1')
     # path_LGG = glob('/content/drive/My Drive/Project/BRATS2017/Brats17TrainingData/LGG/**')
-    print("2")
 
     test_path = path_HGG
 
@@ -380,9 +332,7 @@ if __name__ == "__main__":
 
     # compile the model
     brain_seg_pred = Prediction(batch_size_test=2, load_model_path=model_to_load)
+    
 
     # predicts each volume and save the results in np array
     brain_seg_pred.predict_multiple_volumes(path_HGG, save=True, show=False)
-
-
-

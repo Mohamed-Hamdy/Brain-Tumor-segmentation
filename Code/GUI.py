@@ -688,7 +688,6 @@ class DeepBrainSegUI:
             ValueError
 
         # set arguments
-        '''
         model_to_load = "./All_dataset_Training_Model.hdf5"
         # paths for the testing data
         Test_data = glob(os.path.dirname(self.T2filename))
@@ -702,12 +701,12 @@ class DeepBrainSegUI:
         brain_seg_pred.predict_multiple_volumes(Test_data, save=True, show=False)
 
         print("End of Prediction")
-        '''
-        self.prediction = nib.load('seg.nii.gz').get_data()
+
+        self.prediction = nib.load('Result/seg.nii.gz').get_data()
         temp = self.prediction.copy()
 
         for k in range(155):
-            f_dir = 'HGG Brats17_TCIA_201_1/final_axial_prediction_result/' + str(k) + '.png'
+            f_dir = 'Result/final_axial_prediction_result/' + str(k) + '.png'
             image = cv2.imread(f_dir, cv2.IMREAD_GRAYSCALE)
             temp[:, : , k] = image.copy()
 
@@ -734,7 +733,7 @@ class DeepBrainSegUI:
         root.mainloop()
         '''
 
-        self.seg_canvas_image = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(plot_normalize(temp[:, :, 88])).resize(size))
+        self.seg_canvas_image = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(plot_normalize(temp[:, :, 83])).resize(size))
         self.seg_canvas.create_image(0, 0, image=self.seg_canvas_image, anchor=tk.NW)
 
         self.update_main_view(self.prediction, self.prediction.shape[0] // 2,  self.prediction.shape[1] // 2 , self.prediction.shape[2] // 2)
