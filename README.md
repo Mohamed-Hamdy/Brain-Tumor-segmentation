@@ -80,11 +80,7 @@ Brain tumor segmentation seeks to separate healthy tissue from tumorous regions 
 Brain tumor is one of the most dangerous types of cancer caused by the 5-year survival rate is only about 36%. Accurate diagnosis of the brain the tumor is critical to treatment planning. A major challenge in brain tumor treatment planning and quantitative evaluation is determination of the tumor extent.Manual segmentation of brain tumor extent from 3D MRI volumes is a very time-consuming task and the performance is highly relied on operator’s experience. In this context, a reliable fully automatic segmentation method for the brain tumor segmentation is necessary for an efficient measurement of the tumor extent. In this study, we propose two a fully automatic method for brain tumor segmentation, which is developed using U-Net based model and convent based model deep convolutional networks. Automatic segmentation of brain tumors from medical images is important for clinical assessment and treatment planning of brain tumors.
 
 ### Project_Run_Vedio
-<video width="400" controls>
-  <source src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Project%20Run%20Vedio.mp4" type="video/mp4">
-  <source src="mov_bbb.ogg" type="video/ogg">
-  Your browser does not support HTML video.
-</video>
+![Alt Text](https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Project%20Run%20Vedio.gif)
 
 ## Problem_Definition
 One of the reasons for the rise in death rates in today's society is the development of brain tumors. Any mass caused by aberrant or uncontrolled cell development is referred to as a tumor. A benign or malignant brain tumor can exist. The structure of a benign brain tumor is uniform, and it does not contain active (cancer) cells, whereas the structure of a malignant brain tumor is non-uniform (heterogeneous), and it contains active cells. We must first read an MRI image of the brain before applying image segmentation to detect a brain tumor. We demonstrate an effective strategy for removing noise from MRI images and detecting brain malignancies.
