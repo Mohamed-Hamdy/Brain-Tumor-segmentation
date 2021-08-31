@@ -118,7 +118,7 @@ The CNN used in this study has a similar architecture as that of U-net [1]. Our 
 <h4>Prediction_Phase </h4>
 After network training, prediction may be performed. This step consists to provide the network with the four MRI modalities of an unsegmented volume that it has never processed or encountered before, and it must be able to return a segmented image.
 
-## ResultcAnalysis
+## Result_Analysis
 <h4>Segmentation Result</h4>
 <img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/segmentation%20result.png">
 
@@ -157,8 +157,7 @@ In this chapter we will represent the final model accuracy and compare our two m
 * use the files (Two files one for weights of model and another json file)
 * Run the Prediction files to get the Result without background of Brain 
 * Run the Gui file if you want to get full Result like in <a href="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Gui%20Screen.png">this Screenshot</a>
-
-### Project_Team_Members <br>
+## Project_Team_Members <br>
 Mohamed Hamdy Mohamed - [@LinkedIn](https://www.linkedin.com/in/mohamed-hamdy-0155b2173/) - LinkedIn<br>
 Mohamed Alaa Kelany - [@LinkedIn](https://www.linkedin.com/in/mohamed-alaa-4368551b2/) - LinkedIn<br>
 Mohamed Ali Farouk - [@LinkedIn](https://www.linkedin.com/in/mohamed-ali-b42320185/) - LinkedIn<br>
