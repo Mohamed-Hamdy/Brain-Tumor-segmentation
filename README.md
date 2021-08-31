@@ -76,7 +76,6 @@ In medical imaging of a brain tumor, our major goal is to extract meaningful and
 
 ### Flow of the Model
 <img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/flow%20of%20project.png" width="500" height="300" >
-<hr>
 
 ## Dataset
 Since BraTS'16, data sets utilized for the challenges of this year have been upgraded by professional board-certified neurodiologists, including more routine multimodal 3T MRI images and all ground-truth labelling.
