@@ -41,7 +41,7 @@ A deep learning application based on approach for brain tumor MRI segmentation.
         <li><a href="#segmentation result">Segmentation Result</a></li>
       </ul>
       <ul>
-        <li><a href="#classification result">Classification Result</a></li>
+        <li><a href="#classification result">Model Graphs</a></li>
       </ul>
       <ul>
         <li><a href="#implementation analysis">Implementation Analysis</a></li>
@@ -49,7 +49,20 @@ A deep learning application based on approach for brain tumor MRI segmentation.
       <ul>
         <li><a href="#comparative analysis">Comparative Analysis</a></li>
       </ul>
+     </li>  
+    <li>
+      <a href="#How to run">How To Run</a>
      </li>
+     <li>
+      <a href="#Project Team Members">Project Team Members</a>
+     </li>
+    <li>
+      <a href="#Future work">Future work</a>
+     </li>
+     <li>
+      <a href="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/Project%20documentation.pdf">Project Documentation</a>
+     </li>
+	  
   </ol>
 </details>
 
@@ -99,5 +112,52 @@ After network training, prediction may be performed. This step consists to provi
 ## Result Analysis
 <h4>Segmentation Result</h4>
 <img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/segmentation%20result.png">
+
+
+## <h4>Model Graphs</h4>
+<img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Graphs.png">
+
+
+## <h4>Implementation Analysis</h4>
+This project is very complex and need a very good and power full hardware to get done so we use google Colab as an implementation tool for the two models and the specifications of the tool 
+* 25 GB of Ram 
+* 100 GB of storage
+* Nvidia K80 12 GB as a GPU for training the models 
+But google colab don’t fit all the dataset so its fit about 20% only so we are able to find another device more powerfull than google colab and use it to run the project.
+<img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Gui%20Screen.png">
+
+## <h4>Implementation Analysis</h4>
+This project is very complex and need a very good and power full hardware to get done so we use google Colab as an implementation tool for the two models and the specifications of the tool 
+* 25 GB of Ram 
+* 100 GB of storage
+* Nvidia K80 12 GB as a GPU for training the models 
+But google colab don’t fit all the dataset so its fit about 20% only so we are able to find another device more powerfull than google colab and use it to run the project.
+<img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Gui%20Screen.png">
+
+## <h4>comparative analysis</h4>
+In this chapter we will represent the final model accuracy and compare our two models with other models that solve the problem of brain tumor detection and the following table show this comparison:
+<img src="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Table.png">
+
+
+
+## <h4>How to run</h4>
+* Prepare Your Dataset 
+* Run The Extract Patches File 
+* use the files (Two files store the patches and lables)
+* Run the train files to Train model 
+* use the files (Two files one for weights of model and another json file)
+* Run the Prediction files to get the Result without background of Brain 
+* Run the Gui file if you want to get full Result like in <a href="https://github.com/Mohamed-Hamdy/Brain-Tumor-segmentation/blob/master/images/Gui%20Screen.png">this Screenshot</a>
+
+## <h4>Future work</h4>
+A more powerful GPU is proposed as future development to speed up CNN's learning phase further. A wider range of CNN topologies and other data increase approaches can therefore be tested. Other fascinating perspectives, for example stacking and blending in tumor core and active tumor areas, are also used to increase segmentation performance with ensemble learning approaches.<br>
+More accurate step that can be done in the future is classification which will help the medical staff to know not only the tumor location and region but also the grade of the tumor and the best treatment methods.
+
+### Project Team Members <br>
+Mohamed Hamdy Mohamed - [@LinkedIn](https://www.linkedin.com/in/mohamed-hamdy-0155b2173/) - LinkedIn<br>
+Mohamed Alaa Kelany - [@LinkedIn](https://www.linkedin.com/in/mohamed-alaa-4368551b2/) - LinkedIn<br>
+Mohamed Ali Farouk - [@LinkedIn](https://www.linkedin.com/in/mohamed-ali-b42320185/) - LinkedIn<br>
+Ahamed Gomaa Farouk - [@LinkedIn](https://www.linkedin.com/in/ahmad-gomma-3873441aa/) - LinkedIn
+
 
 
